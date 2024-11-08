@@ -1,7 +1,7 @@
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import Progress from './dashboard/Progress';
-import AchievementCard from './dashboard/AchievementCard';
-import QuickAccess from './dashboard/QuickAccess';
+import Progress from './Progress';
+import AchievementCard from './AchievementCard';
+import QuickAccess from './QuickAccess';
 
 
 

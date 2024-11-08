@@ -1,51 +1,58 @@
-import React from 'react'
-import Sidebar from '../components/Sidebar'
-import Header from '../components/Header'
-import Dashboard from '../components/Dashboard'
-import { useState } from 'react'
-import ToDoList from '../components/TodoList/ToDolist'
-import { useDispatch, useSelector } from 'react-redux'
-import { setActiveItem } from '../Redux/Slices/navSlice'
+import React, { useState, useEffect } from 'react';
+import Navbar from '../components/Home/Navbar';
+import Content from '../components/Home/Content';
+import AuthModal from '../components/Home/AuthModal';
 
-const Home = () => {
-
+function Home() {
   const [darkMode, setDarkMode] = useState(false);
-  
-  const dispatch=useDispatch();
+  const [modalState, setModalState] = useState({
+    isOpen: false,
+    type: 'login',
+  });
 
-  const handleTodoListClick = () => {
-    dispatch(setActiveItem("ToDoList")); 
+  const toggleDarkMode = () => setDarkMode(!darkMode);
+
+  const openModal = (type) => {
+    setModalState({
+      isOpen: true,
+      type,
+    });
   };
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode)
-    document.documentElement.classList.toggle('dark')
-  }
 
-  const activeItem = useSelector((state) => state.navigation.activeItem); 
-  const renderContent = () => {
-    switch (activeItem) {
-      case 'Dashboard':
-        return <Dashboard onTodoListClick={handleTodoListClick} />;
-      case 'ToDoList':
-        return <ToDoList/>;
-      default:
-        return <Dashboard onTodoListClick={handleTodoListClick}/>; 
+  const closeModal = () => {
+    setModalState({
+      isOpen: false,
+      type: modalState.type,
+    });
+  };
+
+  const toggleAuthType = () => {
+    setModalState({
+      isOpen: true,
+      type: modalState.type === 'login' ? 'register' : 'login',
+    });
+  };
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
     }
-  };
-  
+  }, [darkMode]);
+
   return (
-    <div className="flex h-screen bg-gray-50 dark:bg-dark-lighter">
-      <Sidebar />
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <Header isDarkMode={darkMode} toggleDarkMode={toggleDarkMode} />
-        <main className="flex-1 overflow-y-auto bg-gray-50 dark:bg-dark-lighter p-4">
-          <div className="max-w-7xl mx-auto">
-          {renderContent()}
-          </div>
-        </main>
-      </div>
+    <div className="h-screen bg-white dark:bg-gray-900 transition-colors duration-200 w-full">
+      <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} openModal={openModal} />
+      <Content />
+      <AuthModal 
+        isOpen={modalState.isOpen} 
+        type={modalState.type} 
+        onClose={closeModal} 
+        onToggleAuthType={toggleAuthType} 
+      />
     </div>
-  )
+  );
 }
 
-export default Home
+export default Home;
