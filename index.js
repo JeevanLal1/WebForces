@@ -1,4 +1,4 @@
-// app.js
+// index.js
 import express from "express";
 import bodyParser from "body-parser";
 import pg from "pg";
@@ -17,14 +17,11 @@ db.connect();
 const app = express();
 const PORT = 3000;
 
-
-
-
-
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
+// Route for rendering home page initially for login
 app.get('/', (req, res) => {
   res.render('login.ejs', { message: null }); // Initially, no message is displayed
 });
